@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <title>Tom-AR.js</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover, shrink-to-fit=no" />
+    <script src="https://aframe.io/releases/1.0.4/aframe.min.js"></script>
+    <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
+</head>
+    <style>
+        * {
+          margin: 0; padding: 0;
+        }
+    
+        body {
+          overflow: hidden;
+          cursor: none;
+        }
+    </style>
+</head>
+<body>
+   <script language="javascript" type="text/javascript">
+    var music = new Audio();
+    var music2 = new Audio();
+    
+    function init() {
+        music.preload = "auto";
+        music.src = "./mp3/sound.mp3";
+        music.load();
+        music2.preload = "auto";
+        music2.src = "./mp3/cat.mp3";
+        music2.load();
+    }
+
+    init();
+
+    AFRAME.registerComponent('marker11', {
+      init: function () {
+        const marker = this.el;
+
+        marker.addEventListener('markerFound', function () {
+            music.loop = true;
+            music.play();
+            console.log('Found1');
+        });
+
+        marker.addEventListener('markerLost', function () {
+            music.pause();
+            music.currentTime = 0;
+            console.log('Lost1');
+        });
+      }
+    });
+    AFRAME.registerComponent('marker7', {
+      init: function () {
+        const marker = this.el;
+
+        marker.addEventListener('markerFound', function () {
+            music2.loop = true;
+            music2.play();
+            console.log('Found2');
+        });
+
+        marker.addEventListener('markerLost', function () {
+            music2.pause();
+            music2.currentTime = 0;
+            console.log('Lost2');
+        });
+      }
+    });
+
+  </script>
+
+     <a-scene
+        embedded
+        arjs="debugUIEnabled: false"
+        device-orientation-permission-ui="enabled: false"
+        vr-mode-ui="enabled: false">
+        <a-assets>
+            <img id="img"src="./img/bom.png" />
+            <a-asset-item id = "bu" src = "./img/bubu.glb"> </a-asset-item >
+            <a-asset-item id = "ufo" src = "./img/cosmo.glb"> </a-asset-item >
+            <a-asset-item id = "chu" src = "./img/cyucyu.glb"> </a-asset-item >
+            <a-asset-item id = "tths" src = "./img/heiko.glb"> </a-asset-item >
+            <a-asset-item id = "hou" src = "./img/houhou.glb"> </a-asset-item >
+            <a-asset-item id = "kon" src = "./img/konkon.glb"> </a-asset-item >
+            <a-asset-item id = "gao" src = "./img/lion.glb"> </a-asset-item >
+            <a-asset-item id = "pen" src = "./img/penpen.glb"> </a-asset-item >
+            <a-asset-item id = "pyon" src = "./img/pyonpyon.glb"> </a-asset-item >
+            <a-asset-item id = "sui" src = "./img/suisui.glb"> </a-asset-item >
+            <a-asset-item id = "piyo" src = "./img/piyopiyo.glb"> </a-asset-item >  
+        </a-assets>
+        <a-marker marker type='pattern' url='./pattern/bu.patt'>
+          <a-gltf-model src="#bu" scale="1 1 1" position="0 0 0" rotation="0 0 0" animation="property: rotation; from: 0 0 0; to: 0 360 0; loop: true; dur: 10000; easing: linear">
+            </a-image>
+        </a-marker>
+        <a-marker marker2 type='pattern' url='./pattern/ufo.patt'>
+          <a-gltf-model src="#ufo" scale="1 1 1" position="0 0 0" rotation="0 0 0" animation="property: rotation; from: 0 0 0; to: 0 360 0; loop: true; dur: 10000; easing: linear">
+          </a-gltf-model>           
+        </a-marker>
+        <a-marker marker3 type='pattern' url='./pattern/chu.patt'>
+          <a-gltf-model src="#chu" scale="1 1 1" position="0 0 0" rotation="0 0 0" animation="property: rotation; from: 0 0 0; to: 0 360 0; loop: true; dur: 10000; easing: linear">
+          </a-gltf-model>           
+        </a-marker>
+        <a-marker marker4 type='pattern' url='./pattern/tths.patt'>
+          <a-gltf-model src="#tths" scale="1 1 1" position="0 0 0" rotation="0 0 0" animation="property: rotation; from: 0 0 0; to: 0 360 0; loop: true; dur: 10000; easing: linear">
+          </a-gltf-model>           
+        </a-marker>
+        <a-marker marker5 type='pattern' url='./pattern/hou.patt'>
+          <a-gltf-model src="#hou" scale="1 1 1" position="0 0 0" rotation="0 0 0" animation="property: rotation; from: 0 0 0; to: 0 360 0; loop: true; dur: 10000; easing: linear">
+          </a-gltf-model>           
+        </a-marker>
+        <a-marker marker6 type='pattern' url='./pattern/kon.patt'>
+          <a-gltf-model src="#kon" scale="1 1 1" position="0 0 0" rotation="0 0 0" animation="property: rotation; from: 0 0 0; to: 0 360 0; loop: true; dur: 10000; easing: linear">
+          </a-gltf-model>           
+        </a-marker>
+        <a-marker marker7 type='pattern' url='./pattern/gao.patt'>
+          <a-gltf-model src="#gao" scale="1 1 1" position="0 0 0" rotation="0 0 0" animation="property: rotation; from: 0 0 0; to: 0 360 0; loop: true; dur: 10000; easing: linear">
+          </a-gltf-model>           
+        </a-marker>
+        <a-marker marker8 type='pattern' url='./pattern/pen.patt'>
+          <a-gltf-model src="#pen" scale="1 1 1" position="0 0 0" rotation="0 0 0" animation="property: rotation; from: 0 0 0; to: 0 360 0; loop: true; dur: 10000; easing: linear">
+          </a-gltf-model>           
+        </a-marker>
+        <a-marker marker9 type='pattern' url='./pattern/pyon.patt'>
+          <a-gltf-model src="#pyon" scale="1 1 1" position="0 0 0" rotation="0 0 0" animation="property: rotation; from: 0 0 0; to: 0 360 0; loop: true; dur: 10000; easing: linear">
+          </a-gltf-model>           
+        </a-marker>
+        <a-marker marker10 type='pattern' url='./pattern/sui.patt'>
+          <a-gltf-model src="#sui" scale="1 1 1" position="0 0 0" rotation="0 0 0" animation="property: rotation; from: 0 360 0; to: 0 0 0; loop: true; dur: 10000; easing: linear">
+          </a-gltf-model>           
+        </a-marker>
+        <a-marker marker11 type='pattern' url='./pattern/switch.patt'>
+          <a-image src="#img" position="0 0 0" rotation="-45 0 0" animation="property: position; from: 0 0 0; to: 0 0.5 0; loop: true; dur: 500; easing: linear">
+          </a-image>
+      </a-marker>
+      <a-marker marker12 type='pattern' url='./pattern/piyo.patt'>
+        <a-gltf-model src="#piyo" scale="1 1 1" position="0 0 0" rotation="0 0 0" animation="property: rotation; from: 0 360 0; to: 0 0 0; loop: true; dur: 10000; easing: linear">
+        </a-gltf-model>           
+      </a-marker>
+        <a-entity camera></a-entity>
+     </a-scene>
+</body>
+</html>

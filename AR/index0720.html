@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <title>Tom-AR.js</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover, shrink-to-fit=no" />
+    <script src="https://aframe.io/releases/1.0.4/aframe.min.js"></script>
+    <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
+</head>
+    <style>
+        * {
+          margin: 0; padding: 0;
+        }
+    
+        body {
+          overflow: hidden;
+          cursor: none;
+        }
+    </style>
+</head>
+<body>
+
+   <script language="javascript" type="text/javascript">
+    var music = new Audio();
+    var music2 = new Audio();
+    
+    function init() {
+        music.preload = "auto";
+        music.src = "mp3/sound.mp3";
+        music.load();
+        music2.preload = "auto";
+        music2.src = "mp3/cat.mp3";
+        music2.load();
+    }
+
+    init();
+
+    AFRAME.registerComponent('marker11', {
+      init: function () {
+        const marker = this.el;
+
+        marker.addEventListener('markerFound', function () {
+            music.loop = true;
+            music.play();
+            console.log('Found1');
+            writeText('201\n');
+        });
+
+        marker.addEventListener('markerLost', function () {
+            music.pause();
+            music.currentTime = 0;
+            console.log('Lost1');
+            writeText('200\n');
+        });
+      }
+    });
+    AFRAME.registerComponent('marker14', {
+      init: function () {
+        const marker = this.el;
+
+        marker.addEventListener('markerFound', function () {
+            music2.loop = true;
+            music2.play();
+            console.log('Found2');
+        });
+
+        marker.addEventListener('markerLost', function () {
+            music2.pause();
+            music2.currentTime = 0;
+            console.log('Lost2');
+        });
+      }
+    });
+
+       
+  </script>
+
+     <a-scene
+        embedded
+        arjs="debugUIEnabled: false"
+        device-orientation-permission-ui="enabled: false"
+        vr-mode-ui="enabled: false">
+        <a-assets>
+            <img id="img"src="./img/bom.png" />
+           <a-asset-item id = "tths" src = "img/heiko.glb"> </a-asset-item >
+            <a-asset-item id = "koneko" src = "img/koneko.glb"> </a-asset-item >
+         </a-assets>
+        
+        <a-marker marker4 type='pattern' url='pattern/tths.patt'>
+          <a-gltf-model src="#tths" scale="1 1 1" position="0 0 0" rotation="0 0 0" animation="property: rotation; from: 0 0 0; to: 0 360 0; loop: true; dur: 10000; easing: linear">
+          </a-gltf-model>           
+        </a-marker>
+        
+        <a-marker marker11 type='pattern' url='pattern/switch.patt'>
+          <a-image src="#img" position="0 0 0" rotation="-45 0 0" animation="property: position; from: 0 0 0; to: 0 0.5 0; loop: true; dur: 500; easing: linear">
+          </a-image>
+      </a-marker>
+
+      <a-marker marker14 type='pattern' url='pattern/koneko.patt'>
+        <a-gltf-model src="#koneko" scale="1 1 1" position="0 0 0" rotation="0 0 0" animation="property: rotation; from: 0 360 0; to: 0 0 0; loop: true; dur: 10000; easing: linear">
+        </a-gltf-model>           
+      </a-marker>
+     
+        <a-entity camera></a-entity>       
+     </a-scene>
+
+      <div style="width: 100%; position: fixed; bottom: 10px;">
+        <h3>COM(Web-Serial)データ送信機能を使って、外部機器の制御する</h3>
+        <button onclick="onStartButtonClick()" style="width:15%;padding:10px;font-size:20px;">接続開始</button>
+        <button id="write01" style="width:15%;padding:10px;font-size:20px;">1-ＯＮ</button>
+        <button id="write02" style="width:15%;padding:10px;font-size:20px;">1―ＯＦＦ</button>
+        <button id="write03" style="width:15%;padding:10px;font-size:20px;">2-ＯＮ</button>
+        <button id="write04" style="width:15%;padding:10px;font-size:20px;">2―ＯＦＦ</button>
+      </div>
+
+      <script>
+        const button01 = document.getElementById("write01");
+        const button02 = document.getElementById("write02");
+        const button03 = document.getElementById("write03");
+        const button04 = document.getElementById("write04");
+        //button01.addEventListener("click", function () {writeText('L255255255\n');}, false);
+        //button02.addEventListener("click", function () {writeText('L000000000\n');}, false);
+        button01.addEventListener("click", function () {writeText('201\n');}, false);
+        button02.addEventListener("click", function () {writeText('200\n');}, false);
+        button03.addEventListener("click", function () {writeText('401\n');}, false);
+        button04.addEventListener("click", function () {writeText('400\n');}, false);
+        
+        let port;
+  
+        async function onStartButtonClick() {
+          try {
+            port = await navigator.serial.requestPort();
+            await port.open({ baudRate: 115200 });
+            console.log("接続");
+          } catch (e) {
+            console.log("Error");
+          }
+        }
+  
+        async function writeText(text) {
+          const encoder = new TextEncoder();
+          const writer = port.writable.getWriter();
+          await writer.write(encoder.encode(text));
+          console.log("テキスト書き込み: " + text);
+          writer.releaseLock();
+        }
+      </script>
+</body>
+</html>
