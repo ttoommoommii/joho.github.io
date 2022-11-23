@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <title>kakushi</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover, shrink-to-fit=no" />
+    <script src="https://aframe.io/releases/0.6.1/aframe.min.js"></script>
+    <script src="https://raw.githack.com/AR-js-org/AR.js/3.3.1/aframe/build/aframe-ar.js"></script>
+    <style>
+        * {
+          margin: 0; padding: 0;
+        }
+    
+        body {
+          overflow: hidden;
+          cursor: none;
+        }
+    </style>
+</head>
+<body>
+   <script language="javascript" type="text/javascript">
+    var music = new Audio();
+    var music2 = new Audio();
+    
+    function init() {
+        music.preload = "auto";
+        music.src = "./sound.mp3";
+        music.load();
+        music2.preload = "auto";
+        music2.src = "./syakin.mp3";
+        music2.load();
+    }
+
+    init();
+
+    AFRAME.registerComponent('marker', {
+      init: function () {
+        const marker = this.el;
+
+        marker.addEventListener('markerFound', function () {
+            music.loop = true;
+            music.play();
+            console.log('Found1');
+        });
+
+        marker.addEventListener('markerLost', function () {
+            music.pause();
+            music.currentTime = 0;
+            console.log('Lost1');
+        });
+      }
+    });
+    AFRAME.registerComponent('marker2', {
+      init: function () {
+        const marker = this.el;
+
+        marker.addEventListener('markerFound', function () {
+            music2.loop = true;
+            music2.play();
+            console.log('Found2');
+        });
+
+        marker.addEventListener('markerLost', function () {
+            music2.pause();
+            music2.currentTime = 0;
+            console.log('Lost2');
+        });
+      }
+    });
+
+  </script>
+
+     <a-scene
+        embedded
+        arjs="debugUIEnabled: false"
+        device-orientation-permission-ui="enabled: false"
+        vr-mode-ui="enabled: false"
+        >
+        <a-assets>
+            <img id="img"src="bom.png" />
+            <img id="img2"src="banana.png" />
+        </a-assets>
+
+        <a-marker marker type='pattern' url='./pattern-marker.patt'>
+            <a-image src="#img" position="0 0 0" rotation="-45 0 0">
+                <a-animation attribute="position" to="0 0.5 0" direction="alternate" dur="100" repeat="indefinite" easing="linear">
+                </a-animation>
+                </a-image>
+        </a-marker>
+        <a-marker marker2 type='pattern' url='./pattern-tom.patt'>
+            <a-image src="#img2" position="0 0 0" rotation="-45 0 0">
+            <a-animation aattribute="rotation"
+                to="180 360 180"
+                dur="2000"
+                easing="linear"
+                repeat="indefinite">
+            </a-animation>
+            </a-image>
+        </a-marker>
+        <a-entity camera></a-entity>
+     </a-scene>
+</body>
+</html>

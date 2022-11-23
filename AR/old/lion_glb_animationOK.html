@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <title>Tom-AR.js</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover, shrink-to-fit=no" />
+    <script src="https://aframe.io/releases/1.0.4/aframe.min.js"></script>
+    <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
+</head>
+    <style>
+        * {
+          margin: 0; padding: 0;
+        }
+    
+        body {
+          overflow: hidden;
+          cursor: none;
+        }
+    </style>
+</head>
+<body>
+   <script language="javascript" type="text/javascript">
+    var music = new Audio();
+    var music2 = new Audio();
+    
+    function init() {
+        music.preload = "auto";
+        music.src = "./mp3/sound.mp3";
+        music.load();
+        music2.preload = "auto";
+        music2.src = "./mp3/cat.mp3";
+        music2.load();
+    }
+
+    init();
+
+    AFRAME.registerComponent('marker', {
+      init: function () {
+        const marker = this.el;
+
+        marker.addEventListener('markerFound', function () {
+            music.loop = true;
+            music.play();
+            console.log('Found1');
+        });
+
+        marker.addEventListener('markerLost', function () {
+            music.pause();
+            music.currentTime = 0;
+            console.log('Lost1');
+        });
+      }
+    });
+    AFRAME.registerComponent('marker2', {
+      init: function () {
+        const marker = this.el;
+
+        marker.addEventListener('markerFound', function () {
+            music2.loop = true;
+            music2.play();
+            console.log('Found2');
+        });
+
+        marker.addEventListener('markerLost', function () {
+            music2.pause();
+            music2.currentTime = 0;
+            console.log('Lost2');
+        });
+      }
+    });
+
+  </script>
+
+     <a-scene
+        embedded
+        arjs="debugUIEnabled: false"
+        device-orientation-permission-ui="enabled: false"
+        vr-mode-ui="enabled: false"
+        >
+        <a-assets>
+            <img id="img"src="./img/bom.png" />
+            <a-asset-item id = "lion" src = "./img/lion.glb"> </a-asset-item >
+        </a-assets>
+        <a-marker marker type='pattern' url='./pattern/bom.patt'>
+            <a-image src="#img" position="0 0 0" rotation="-45 0 0" animation="property: position; from: 0 0 0; to: 0 0.5 0; loop: true; dur: 100; easing: linear">
+            </a-image>
+        </a-marker>
+        <a-marker marker2 type='pattern' url='./pattern/pattern-tom.patt'>
+            <a-gltf-model src="#lion" scale="1 1 1" position="0 0 0" rotation="0 0 0" animation="property: rotation; from: 0 0 0; to: 0 360 0; loop: true; dur: 10000; easing: linear">
+            </a-gltf-model>           
+        </a-marker>
+        <a-entity camera></a-entity>
+     </a-scene>
+</body>
+</html>
