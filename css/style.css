@@ -18,7 +18,12 @@ body {
 
 /* Titles */
 
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   font-family: "Raleway";
   font-weight: 300;
   color: #333;
@@ -51,13 +56,15 @@ a {
   transition: color 0.1s ease-in, background 0.1s ease-in;
 }
 
-a:hover, a:focus {
+a:hover,
+a:focus {
   color: #7b7b7b;
   text-decoration: none;
   outline: 0;
 }
 
-a:before, a:after {
+a:before,
+a:after {
   -webkit-transition: color 0.1s ease-in, background 0.1s ease-in;
   -moz-transition: color 0.1s ease-in, background 0.1s ease-in;
   -ms-transition: color 0.1s ease-in, background 0.1s ease-in;
@@ -84,7 +91,9 @@ hr {
   background-color: #ffffff;
 }
 
-.navbar-default .navbar-nav>.active>a, .navbar-default .navbar-nav>.active>a:hover, .navbar-default .navbar-nav>.active>a:focus {
+.navbar-default .navbar-nav>.active>a,
+.navbar-default .navbar-nav>.active>a:hover,
+.navbar-default .navbar-nav>.active>a:focus {
   color: #ffffff;
   background-color: #0099FF;
 }
@@ -92,13 +101,13 @@ hr {
 .navbar-brand {
   font-size: 60px;
   padding-top: 0px;
-  padding-bottom: 0px;
+  padding-bottom: 60px;
 }
 
 .btn-theme {
   color: #ffffff;
   background-color: #0099FF;
-  border-color : transparent;
+  border-color: transparent;
 }
 
 .btn {
@@ -199,7 +208,7 @@ hr {
 
 #f {
   padding-top: 20px;
-  background-color:#0099FF;
+  background-color: #0099FF;
 }
 
 #f p {
@@ -225,10 +234,11 @@ hr {
 }
 
 .contact-form label {
-   color: #999;
+  color: #999;
 }
 
-.contact-form input, .contact-form textarea {
+.contact-form input,
+.contact-form textarea {
   padding: 10px 12px;
   border-radius: 0;
   box-shadow: none;
@@ -240,7 +250,7 @@ hr {
   text-align: center;
 }
 
-.contact-form .form-send button  {
+.contact-form .form-send button {
   background: #0099FF;
   border: 0;
   padding: 10px 30px;
