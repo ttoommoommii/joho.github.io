@@ -49,8 +49,8 @@ let img_On;
 let img_Off;
 let img_OnX = 80;
 let img_OnY = 100;
-let img_OffX = 200;
-let img_OffY = 80;
+let img_OffX = 550;
+let img_OffY = 100;
 let img_LedF = 0;
 let img_LedWhite;
 
@@ -221,15 +221,15 @@ function draw() {
                 if (img_LedF == 0 && rightHandX < img_OnX + 20 && rightHandX > img_OnX - 20 && rightHandY < img_OnY) {
                         img_LedF = 1;
                         soundS.play();
-                        //writeText('401\r\n');
-                        writeText('R\r\n');
+                        writeText('401\r\n');
+                        //writeText('R\r\n');
 
                 }
                 if (img_LedF == 1 && leftHandX < img_OffX + 20 && leftHandX > img_OffX - 20 && leftHandY < img_OffY) {
                         img_LedF = 0;
                         soundE.play();
-                        //writeText('400\r\n');
-                        writeText('S000000000\r\n');
+                        writeText('400\r\n');
+                        //writeText('S000000000\r\n');
                 }
                 if (img_LedF == 0) {
                         image(img_LedWhite, img_LedX, img_LedY, 80, 120);
