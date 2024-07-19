@@ -161,8 +161,8 @@ function setup() {
 
         OnButton = createButton("On");
         OnButton.mousePressed(function () {
-                //writeText('401\r\n');
-                writeText('R\r\n');
+                writeText('401\r\n');
+                //writeText('R\r\n');
                 console.log("On");
         });
         OnButton.size(50, 30);
@@ -172,8 +172,8 @@ function setup() {
 
         OffButton = createButton("Off");
         OffButton.mousePressed(function () {
-                //writeText('400\r\n');
-                writeText('S000000000\r\n');
+                writeText('400\r\n');
+                //writeText('S000000000\r\n');
                 console.log("Off");
         });
         OffButton.size(50, 30);
