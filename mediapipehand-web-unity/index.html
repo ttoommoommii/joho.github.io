@@ -5,9 +5,14 @@
   <meta charset="utf-8">
 
   <!-- 3つのライブラリを読み込む -->
+   <!--
   <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils/drawing_utils.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands/hands.js"></script>
+  -->
+  <script src="camera_utils.js"></script>
+  <script src="drawing_utils.js"></script>
+  <script src="hands.js"></script>
   <!-- 3つのライブラリを読み込む -->
 
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
@@ -34,7 +39,7 @@
     <div id="unity-footer">
       <div id="unity-webgl-logo"></div>
       <div id="unity-fullscreen-button"></div>
-      <div id="unity-build-title">福島県立平工業高校　両手の認識</div>
+      <div id="unity-build-title">MwdiapipeWebGL_T</div>
     </div>
   </div>
 
@@ -42,21 +47,18 @@
   <!-- Webカメラの映像（入力） -->
   <video class="input_video" style="display:none" id="input"></video>
 
-<!--
   <div id="loading" , class="scaling-squares-spinner" :style="spinnerStyle">
     <div class="square"></div>
     <div class="square"></div>
     <div class="square"></div>
     <div class="square"></div>
   </div>
--->
 
   <!--  認識した手の形状を可視化した映像（出力）  -->
   <canvas class="output_canvas" id="output" width="320" height="180"></canvas>
 
 
   <!-- MediaPipe設定エリア-->
-<!--
   <div class="mediapipe-setting">
     maxNumHands:<span id="maxNumHandsValue"></span><br>
     <input type="range" id="maxNumHandsOption" min="1" max="4" step="1" value="2"><br><br>
@@ -65,7 +67,6 @@
     minTrackingConfidence:<span id="minTrackingConfidenceValue"></span><br>
     <input type="range" id="minTrackingConfidenceOption" min="0" max="1" step="0.01" value="0.5">
   </div>
--->
   <!-- MediaPipeエリア-->
 
 
@@ -132,7 +133,7 @@
     // existing user projects that might rely on the earlier manual
     // JS_FileSystem_Sync() behavior, but in future Unity version, this will be
     // expected to change.
-/*
+
     if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
       // Mobile device style: fill the whole browser client area with the game canvas:
 
@@ -150,10 +151,10 @@
       unityShowBanner('WebGL builds are not supported on mobile devices.');
     } else {
       // Desktop style: Render the game canvas in a window that can be maximized to fullscreen:
-*/
+
       canvas.style.width = "800px";//Tom
       canvas.style.height = "450px";//Tom
-//    }
+    }
 
     loadingBar.style.display = "block";
 
@@ -174,7 +175,7 @@
           function () {
             mediapipeHandsStars();
           },
-          "1000"
+          "3000"
         );//Tom
 
       }).catch((message) => {
