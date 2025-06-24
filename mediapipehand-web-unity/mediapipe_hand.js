@@ -2,7 +2,8 @@
     let hands = null;
     hands = new Hands({
       locateFile: (file) => {
-        return `https://cdn.jsdelivr.net/npm/@mediapipe/hands/${file}`;
+        //return `https://cdn.jsdelivr.net/npm/@mediapipe/hands/${file}`;
+        return `./mdata/${file}`;
       }
     });
 
