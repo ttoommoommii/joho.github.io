@@ -34,28 +34,29 @@
     <div id="unity-footer">
       <div id="unity-webgl-logo"></div>
       <div id="unity-fullscreen-button"></div>
-      <div id="unity-build-title">平工業高校　両手の認識</div>
+      <div id="unity-build-title">福島県立平工業高校　両手の認識</div>
     </div>
   </div>
 
   <!-- MediaPipeエリア-->
   <!-- Webカメラの映像（入力） -->
   <video class="input_video" style="display:none" id="input"></video>
-  <!--
+
+<!--
   <div id="loading" , class="scaling-squares-spinner" :style="spinnerStyle">
     <div class="square"></div>
     <div class="square"></div>
     <div class="square"></div>
     <div class="square"></div>
   </div>
-  -->
+-->
 
   <!--  認識した手の形状を可視化した映像（出力）  -->
   <canvas class="output_canvas" id="output" width="320" height="180"></canvas>
 
 
   <!-- MediaPipe設定エリア-->
-  <!-- 
+<!--
   <div class="mediapipe-setting">
     maxNumHands:<span id="maxNumHandsValue"></span><br>
     <input type="range" id="maxNumHandsOption" min="1" max="4" step="1" value="2"><br><br>
@@ -64,7 +65,7 @@
     minTrackingConfidence:<span id="minTrackingConfidenceValue"></span><br>
     <input type="range" id="minTrackingConfidenceOption" min="0" max="1" step="0.01" value="0.5">
   </div>
-  -->
+-->
   <!-- MediaPipeエリア-->
 
 
@@ -173,8 +174,9 @@
           function () {
             mediapipeHandsStars();
           },
-          "3000"
+          "1000"
         );//Tom
+
       }).catch((message) => {
         alert(message);
       });
