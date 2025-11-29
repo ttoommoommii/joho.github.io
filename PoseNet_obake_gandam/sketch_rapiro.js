@@ -81,7 +81,7 @@ function preload() {
         soundFormats('ogg', 'mp3');
         sound_gandam1 = loadSound("img/gandam1.mp3");
         sound_gandam2 = loadSound("img/gandam2.mp3");
-        sound_gandam3 = loadSound("img/gandam3.mp3");
+        sound_gandam3 = loadSound("img/beam.mp3");//("img/gandam3.mp3");//ビーム
         sound_gandam4 = loadSound("img/gandam4.mp3");
         sound_gandam_bgm1 = loadSound("img/Gundam_bgm1.mp3");
         sound_gandam_bgm2 = loadSound("img/Gundam_bgm2.mp3");
@@ -195,19 +195,19 @@ function setup() {
 
         //p5.play　
 
-        rapiro_l = createSprite(camp_w - 150, 80);
+        rapiro_l = createSprite(camp_w - 100, 100);
         rapiro_l.addImage(loadImage('img/rapiro_l.png'));
         rapiro_l.scale = 0.1;
-        rapiro_r = createSprite(150, 80);
+        rapiro_r = createSprite(100, 100);
         rapiro_r.addImage(loadImage('img/rapiro_r.png'));
         rapiro_r.scale = 0.1;
-        rapiro_c = createSprite(camp_w / 2, 50);
+        rapiro_c = createSprite(camp_w / 2, 80);
         rapiro_c.addImage(loadImage('img/rapiro_c.png'));
         rapiro_c.scale = 0.15;
-        gandamu_raifuru = createSprite(camp_w - 50, camp_h / 2);
-        gandamu_raifuru.addImage(loadImage('img/gandam_raifuru.png'));
+        gandamu_raifuru = createSprite(camp_w - 100, camp_h / 1.5);
+        gandamu_raifuru.addImage(loadImage('img/gandam_raifuru1.png'));
         gandamu_raifuru.scale = 0.3;
-        rapiro_fig = createSprite(50, camp_h / 2);
+        rapiro_fig = createSprite(100, camp_h / 1.5);
         rapiro_fig.addImage(loadImage('img/rapiro_fig.png'));
         rapiro_fig.scale = 0.3;
 
@@ -341,24 +341,50 @@ function draw() {
                 writeText2('#M5');
         }
         else if (!sound_f && gandamu_raifuru.overlap(circle2)) {
-                sound_f = true;
+                //sound_f = true;
                 //sound_gandam_yunikon.pause();
-                sound_gandam3.setVolume(1);
-                sound_gandam3.play();
+                //sound_gandam3.setVolume(1);//ビーム
+                //sound_gandam3.play();
                 writeText2('#M9');
+                //
+                sound_f = true;
+                var s = createSprite(gandamu_raifuru.position.x - 50, gandamu_raifuru.position.y + 50, 30, 30);
+                s.addImage(loadImage('img/beam2.png'));
+                s.scale = 0.1;
+                s.velocity.x = random(-5, 1);
+                s.velocity.y = random( 5, 0);
+                s.life = 50;//set a self destruction timer (life)
+                if (!sound_gandam3.isPlaying()) {
+                        sound_gandam3.play();
+                }
+
         }
         else if (!sound_f && rapiro_fig.overlap(circle)) {
+                writeText2('#M7');
+
                 sound_f = true;
                 var s = createSprite(rapiro_fig.position.x + 50, rapiro_fig.position.y, 30, 30);
                 s.addImage(loadImage('img/gandam_fan.png'));
                 s.scale = 0.05;
-                s.velocity.x = random(0, 20);
-                s.velocity.y = random(-5, 5);
+                s.velocity.x = random(0, 10);
+                s.velocity.y = random(-5, 3);
                 s.life = 300;//set a self destruction timer (life)
                 if (!sound_gandam_fannneru.isPlaying()) {
                         sound_gandam_fannneru.play();
                 }
         }
+        /*
+        #M0	停止	青
+        #M1	前進	青
+        #M2	後退	青
+        #M3	右に曲がる	青
+        #M4	左に曲がる	青
+        #M5	両手を振る	緑　真ん中
+        #M6	右手を振る	黄　右
+        #M7	両手を握る	青　ファンネル
+        #M8	左手を振る	赤　左
+        #M9	右手を伸ばす	青　ライフル
+        */
         if (!sound_gandam1.isPlaying() && !sound_gandam2.isPlaying() && !sound_gandam4.isPlaying()) {
                 if (!sound_gandam_yunikon.isPlaying() && sound_bgm) {
                         sound_gandam_yunikon.loop();
