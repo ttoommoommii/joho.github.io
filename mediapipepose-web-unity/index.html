@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+  <!-- ４つのライブラリを読み込む -->
+  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/control_utils/control_utils.js" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils/drawing_utils.js" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/pose@0.2/pose.js" crossorigin="anonymous"></script>
+  <!-- ４つのライブラリを読み込む -->
+
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>Unity WebGL Player | Pose</title>
+    <link rel="shortcut icon" href="TemplateData/favicon.ico">
+    <link rel="stylesheet" href="TemplateData/style.css">
+
+    <!-- スタイルシートを読み込む -->
+  <link rel="stylesheet" href="TemplateData/hands.css">
+  <!-- スタイルシートを読み込む -->
+
+  </head>
+  <body>
+    <div id="unity-container" class="unity-desktop">
+      <canvas id="unity-canvas" width=960 height=600></canvas>
+      <div id="unity-loading-bar">
+        <div id="unity-logo"></div>
+        <div id="unity-progress-bar-empty">
+          <div id="unity-progress-bar-full"></div>
+        </div>
+      </div>
+      <div id="unity-warning"> </div>
+      <div id="unity-footer">
+        <div id="unity-webgl-logo"></div>
+        <div id="unity-fullscreen-button"></div>
+        <div id="unity-build-title">Pose</div>
+      </div>
+    </div>
+
+    <!-- MediaPipeエリア-->
+  <!-- Webカメラの映像（入力） -->
+  <video class="input_video" style="display:none" id="input"></video>
+  <!--
+  <div id="loading" , class="scaling-squares-spinner" :style="spinnerStyle">
+    <div class="square"></div>
+    <div class="square"></div>
+    <div class="square"></div>
+    <div class="square"></div>
+  </div>
+  -->
+
+  <!--  認識した手の形状を可視化した映像（出力）  -->
+  <canvas class="output_canvas" id="output" width="320" height="180"></canvas>
+
+
+  <!-- MediaPipe設定エリア-->
+  <div class="mediapipe-setting">
+    upperBodyOnly:<span id="upperBodyOnlyValue"></span><br>
+    <input type="range" id="upperBodyOnlyOption" min="0" max="1" step="1" value="0"><br><br>
+    minDetectionConfidence:<span id="minDetectionConfidenceValue"></span><br>
+    <input type="range" id="minDetectionConfidenceOption" min="0" max="1" step="0.01" value="0.5"><br><br>
+    minTrackingConfidence:<span id="minTrackingConfidenceValue"></span><br>
+    <input type="range" id="minTrackingConfidenceOption" min="0" max="1" step="0.01" value="0.5">
+  </div>
+  <!-- MediaPipeエリア-->
+
+    <script>
+      var container = document.querySelector("#unity-container");
+      var canvas = document.querySelector("#unity-canvas");
+      var loadingBar = document.querySelector("#unity-loading-bar");
+      var progressBarFull = document.querySelector("#unity-progress-bar-full");
+      var fullscreenButton = document.querySelector("#unity-fullscreen-button");
+      var warningBanner = document.querySelector("#unity-warning");
+
+      // Shows a temporary message banner/ribbon for a few seconds, or
+      // a permanent error message on top of the canvas if type=='error'.
+      // If type=='warning', a yellow highlight color is used.
+      // Modify or remove this function to customize the visually presented
+      // way that non-critical warnings and error messages are presented to the
+      // user.
+      function unityShowBanner(msg, type) {
+        function updateBannerVisibility() {
+          warningBanner.style.display = warningBanner.children.length ? 'block' : 'none';
+        }
+        var div = document.createElement('div');
+        div.innerHTML = msg;
+        warningBanner.appendChild(div);
+        if (type == 'error') div.style = 'background: red; padding: 10px;';
+        else {
+          if (type == 'warning') div.style = 'background: yellow; padding: 10px;';
+          setTimeout(function() {
+            warningBanner.removeChild(div);
+            updateBannerVisibility();
+          }, 5000);
+        }
+        updateBannerVisibility();
+      }
+
+      var buildUrl = "Build";
+      var loaderUrl = buildUrl + "/web.loader.js";
+      var config = {
+        dataUrl: buildUrl + "/web.data",
+        frameworkUrl: buildUrl + "/web.framework.js",
+        codeUrl: buildUrl + "/web.wasm",
+        streamingAssetsUrl: "StreamingAssets",
+        companyName: "DefaultCompany",
+        productName: "Pose",
+        productVersion: "0.1",
+        showBanner: unityShowBanner,
+      };
+
+      // By default, Unity keeps WebGL canvas render target size matched with
+      // the DOM size of the canvas element (scaled by window.devicePixelRatio)
+      // Set this to false if you want to decouple this synchronization from
+      // happening inside the engine, and you would instead like to size up
+      // the canvas DOM size and WebGL render target sizes yourself.
+      // config.matchWebGLToCanvasSize = false;
+
+      // If you would like all file writes inside Unity Application.persistentDataPath
+      // directory to automatically persist so that the contents are remembered when
+      // the user revisits the site the next time, uncomment the following line:
+      // config.autoSyncPersistentDataPath = true;
+      // This autosyncing is currently not the default behavior to avoid regressing
+      // existing user projects that might rely on the earlier manual
+      // JS_FileSystem_Sync() behavior, but in future Unity version, this will be
+      // expected to change.
+
+      if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
+        // Mobile device style: fill the whole browser client area with the game canvas:
+
+        var meta = document.createElement('meta');
+        meta.name = 'viewport';
+        meta.content = 'width=device-width, height=device-height, initial-scale=1.0, user-scalable=no, shrink-to-fit=yes';
+        document.getElementsByTagName('head')[0].appendChild(meta);
+        container.className = "unity-mobile";
+        canvas.className = "unity-mobile";
+
+        // To lower canvas resolution on mobile devices to gain some
+        // performance, uncomment the following line:
+        // config.devicePixelRatio = 1;
+
+        unityShowBanner('WebGL builds are not supported on mobile devices.');
+      } else {
+        // Desktop style: Render the game canvas in a window that can be maximized to fullscreen:
+
+        canvas.style.width = "960px";
+        canvas.style.height = "600px";
+      }
+
+      loadingBar.style.display = "block";
+
+      var script = document.createElement("script");
+      script.src = loaderUrl;
+      script.onload = () => {
+        createUnityInstance(canvas, config, (progress) => {
+          progressBarFull.style.width = 100 * progress + "%";
+        }).then((unityInstance) => {
+          loadingBar.style.display = "none";
+          fullscreenButton.onclick = () => {
+            unityInstance.SetFullscreen(1);
+          };
+        // MediaPipe Process Start//Tom
+        _unityInstance = unityInstance;
+        setTimeout(
+          function () {
+            mediapipePoseStars();
+          },
+          "3000"
+        );//Tom
+
+        }).catch((message) => {
+          alert(message);
+        });
+      };
+      document.body.appendChild(script);
+
+// MediaPipe Pose Process Start///////////////////////////////////////////////
+    // MediaPipe Pose Instance
+    const pose = new Pose({locateFile: function(file){
+      return `https://cdn.jsdelivr.net/npm/@mediapipe/pose@0.2/${file}`;
+    }});//P
+
+
+    function mediapipePoseStars() {
+
+      const video = document.getElementById('input');
+      const canvas = document.getElementById('output');
+      const ctx = canvas.getContext('2d');
+      
+      //カメラからの映像をpose.jsで使えるようにする
+      const camera = new Camera(video, {
+        onFrame: async function(){
+          // Remove Loading Icon
+          var loadingElement = document.getElementById("loading");
+          if (loadingElement != null) {
+            loadingElement.remove();
+          }
+          await pose.send({image: video});
+        },
+        width: 320, //640,
+        height: 180 //480
+      });//P
+
+      pose.setOptions({
+        upperBodyOnly: false,
+        smoothLandmarks: true,
+        minDetectionConfidence: 0.5,
+        minTrackingConfidence: 0.5
+      });
+
+      //形状認識した結果の取得
+      pose.onResults(results => {
+        // JS->Unity:ClearCanvas
+        if (_unityInstance != null) {
+          _unityInstance.SendMessage('Plane', 'ClearCanvas');
+          //_unityInstance.SendMessage('Plane1', 'ClearCanvas');
+        }//if
+
+        //ctx.save();
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.drawImage(results.image, 0, 0, canvas.width, canvas.height);
+
+        //線を描く
+        drawConnectors(ctx, results.poseLandmarks, POSE_CONNECTIONS, {color:'#00F', lineWidth:2});
+        //ランドマークを描く
+        drawLandmarks(ctx, results.poseLandmarks, {color:'#F00', lineWidth:0, fillColor:'#800', radius:3});
+        ctx.restore();
+        
+       //console.log(results.poseLandmarks);
+       if (results.poseLandmarks) {
+            if (_unityInstance != null) {
+                _unityInstance.SendMessage('Plane', 'DrawPoseLandmark', String(JSON.stringify(results.poseLandmarks)));
+                //_unityInstance.SendMessage('Plane1', 'DrawHandsLandmark', String(JSON.stringify(results.poseLandmarks)));
+            }//if
+            _unityInstance.SendMessage('Plane', 'T', String(JSON.stringify(results.poseLandmarks)));
+        }//if
+      });//onResults
+      camera.start();
+
+    }//形状認識した結果の取得
+
+    // MediaPipe Hands Process End/////////////////////////////////////////////////
+
+    // MediaPipe Setting Callback Start////////////////////////////////////////////
+
+    const upperBodyOnlyOptionElement = document.getElementById('upperBodyOnlyOption');
+    const upperBodyOnlyValueElement = document.getElementById('upperBodyOnlyValue');
+    const setupperBodyOnlyValue = (val) => {
+      //upperBodyOnlyValueElement.innerText = val;
+      if (pose != null) {
+        if(parseInt(val)){
+          pose.setOptions({
+            upperBodyOnly: true
+          });
+          upperBodyOnlyValueElement.innerText = "UpperBodyOnly";
+        }else{
+          pose.setOptions({
+            upperBodyOnly: false
+          });
+          upperBodyOnlyValueElement.innerText = "AllBody";
+        }//else
+      }//if
+    }
+    const upperBodyOnlyValueChange = (e) => {
+      setupperBodyOnlyValue(e.target.value);
+    }
+
+    const minDetectionConfidenceOptionElement = document.getElementById('minDetectionConfidenceOption');
+    const minDetectionConfidenceValueElement = document.getElementById('minDetectionConfidenceValue');
+    const setMinDetectionConfidenceValue = (val) => {
+      minDetectionConfidenceValueElement.innerText = val;
+
+      if (pose != null) {
+        pose.setOptions({
+          minDetectionConfidence: parseFloat(val)
+        });
+      }
+    }
+    const maxMinDetectionConfidenceChange = (e) => {
+      setMinDetectionConfidenceValue(e.target.value);
+    }
+
+    const minTrackingConfidenceOptionElement = document.getElementById('minTrackingConfidenceOption');
+    const minTrackingConfidenceValueElement = document.getElementById('minTrackingConfidenceValue');
+    const setMinTrackingConfidenceValue = (val) => {
+      minTrackingConfidenceValueElement.innerText = val;
+
+      if (pose != null) {
+        hands.setOptions({
+          minTrackingConfidence: parseFloat(val)
+        });
+      }
+    }
+    const maxMinTrackingConfidenceChange = (e) => {
+      setMinTrackingConfidenceValue(e.target.value);
+    }
+
+
+
+
+    window.onload = () => {
+
+      upperBodyOnlyOptionElement.addEventListener('input', upperBodyOnlyValueChange);
+      setupperBodyOnlyValue(upperBodyOnlyOptionElement.value);
+
+      minDetectionConfidenceOptionElement.addEventListener('input', maxMinDetectionConfidenceChange);
+      setMinDetectionConfidenceValue(minDetectionConfidenceOptionElement.value);
+
+      minTrackingConfidenceOptionElement.addEventListener('input', maxMinTrackingConfidenceChange);
+      setMinTrackingConfidenceValue(minTrackingConfidenceOptionElement.value);
+
+    }
+
+    // MediaPipe Setting Callback End/
+    //tom
+    let _unityInstance = null;//Tom
+
+    </script>
+  </body>
+</html>
