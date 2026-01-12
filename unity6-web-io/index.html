@@ -9,7 +9,7 @@
   </head>
   <body>
     <div id="unity-container" class="unity-desktop">
-      <canvas id="unity-canvas" width=960 height=300 tabindex="-1"></canvas>
+      <canvas id="unity-canvas" width=960 height=200 tabindex="-1"></canvas>
       <div id="unity-loading-bar">
         <div id="unity-logo"></div>
         <div id="unity-progress-bar-empty">
@@ -101,7 +101,7 @@
       } else {
         // Desktop style: Render the game canvas in a window that can be maximized to fullscreen:
         canvas.style.width = "960px";
-        canvas.style.height = "300px";
+        canvas.style.height = "200px";
       }
 
       document.querySelector("#unity-loading-bar").style.display = "block";
@@ -138,7 +138,7 @@
 
         <script>
           function onClick() {
-              msg.innerText = '送信されたDATAは[' + dataText.value + ']です';
+              msg.innerText = 'Unityへ送信したDATAは[' + dataText.value + ']です';
               _unityInstance.SendMessage('Web_Recive', 'SetText', dataText.value);
           }
         </script>      
