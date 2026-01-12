@@ -83,9 +83,10 @@
       // JS_FileSystem_Sync() behavior, but in future Unity version, this will be
       // expected to change.
 
+      /*
       if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
         // Mobile device style: fill the whole browser client area with the game canvas:
-
+        
         var meta = document.createElement('meta');
         meta.name = 'viewport';
         meta.content = 'width=device-width, height=device-height, initial-scale=1.0, user-scalable=no, shrink-to-fit=yes';
@@ -96,13 +97,14 @@
         // To lower canvas resolution on mobile devices to gain some
         // performance, uncomment the following line:
         // config.devicePixelRatio = 1;
-
+        
 
       } else {
         // Desktop style: Render the game canvas in a window that can be maximized to fullscreen:
         canvas.style.width = "960px";
         canvas.style.height = "150px";
       }
+      */
 
       document.querySelector("#unity-loading-bar").style.display = "block";
 
@@ -131,9 +133,9 @@
     <!--テキストボックスとボタンを配置　ここから-->
         <div align="center">
           <br>
-          <label style="font-size:30px;">DATA：<input id="dataText" type="text" size="30" style="font-size:30px;" value=""></label>
+          <label style="font-size:40px;">HTML  <input id="dataText" type="text" size="30" style="font-size:30px;" value=""></label>
           <input type="button" value="送信する" style="font-size:30px;" onClick="onClick()" />
-          <p id="msg" style="font-size:40px;"></p>
+          <BR><label id="msg" style="font-size:30px;"></label>
         </div>
 
         <script>
