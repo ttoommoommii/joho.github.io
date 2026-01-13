@@ -9,6 +9,14 @@
   </head>
   <body>
     <div id="unity-container" class="unity-desktop">
+       <br>
+        <label style="font-size:40px;">DATA：<input id="dataText" type="text" size="20" style="font-size:50px;" value=""></label>
+        <input type="button" value="送信する" style="font-size:30px;" onClick="onClick()" />
+        <BR>
+        <label id="msg" style="font-size:50px;">-</label>
+        <center><BR><label style="font-size:20px;">-ここまでＨＴＭＬ-</label>
+        <BR><label style="font-size:20px;">-ここからＵｎｉｔｙ-</label></center>
+
       <canvas id="unity-canvas" width=960 height=600 tabindex="-1"></canvas>
       <div id="unity-loading-bar">
         <div id="unity-logo"></div>
@@ -129,12 +137,14 @@
     </script>
 
     <!--テキストボックスとボタンを配置　ここから-->
+        <!--
         <div align="center">
           <br>
           <label style="font-size:30px;">DATA：<input id="dataText" type="text" size="30" style="font-size:30px;" value=""></label>
           <input type="button" value="送信する" style="font-size:30px;" onClick="onClick()" />
           <p id="msg" style="font-size:40px;"></p>
         </div>
+    -->
 
         <script>
           function onClick() {
