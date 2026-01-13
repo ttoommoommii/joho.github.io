@@ -10,10 +10,10 @@
   <body>
     <div id="unity-container" class="unity-desktop">
        <br>
-        <label style="font-size:40px;">DATA：<input id="dataText" type="text" size="20" style="font-size:50px;" value=""></label>
-        <input type="button" value="送信する" style="font-size:30px;" onClick="onClick()" />
+        <label style="font-size:20px;">DATA：<input id="dataText" type="text" size="10" style="font-size:20px;" value=""></label>
+        <input type="button" value="送信する" style="font-size:20px;" onClick="onClick()" />
         <BR>
-        <label id="msg" style="font-size:50px;">-</label>
+        <label id="msg" style="font-size:20px;">-</label>
         <center><BR><label style="font-size:20px;">-ここまでＨＴＭＬ-</label>
         <BR><label style="font-size:20px;">-ここからＵｎｉｔｙ-</label></center>
 
@@ -91,7 +91,9 @@
       // JS_FileSystem_Sync() behavior, but in future Unity version, this will be
       // expected to change.
 
-      if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
+      //if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
+      if (1) {
+        
         // Mobile device style: fill the whole browser client area with the game canvas:
 
         var meta = document.createElement('meta');
